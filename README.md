@@ -1,9 +1,9 @@
 # Learn C Language
 
-Run locally:  `node server.js`  → http://localhost:3000 (demo OTP shown on screen)
+Run locally:  `node server.js`  → http://localhost:3000 
 
 Real OTP e-mails (set as environment variables — never put them in code):
-    SMTP_USER=yourgmail@gmail.com SMTP_PASS="your 16 char app password" node server.js
+    SMTP_USER=learningclanguage13@gmail.com SMTP_PASS="ghkr hwbs cmvm ewca" node server.js
 
 Deploy (Render / Railway / any Docker host): use the included Dockerfile, set SMTP_USER and SMTP_PASS in the dashboard.
 
