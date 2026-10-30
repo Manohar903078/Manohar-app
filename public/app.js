@@ -328,20 +328,64 @@ function interviewList() {
   ${S.user.country === "India" ? `<div class="btns"><button class="btn" onclick="go('college')">🎓 Your College</button></div>` : ""}`;
 }
 
-// ---------- COLLEGE (India only) ----------
-const CL = { name: LS.get("college", ""), kind: "B.Tech", shown: false };
+// ---------- COLLEGE / UNIVERSITY PAPERS (India only) ----------
+const CS = Object.assign({ state: "Andhra Pradesh", name: "", kind: "B.Tech", uni: "jntuk", set: 0 }, LS.get("college2", {}), { shown: false });
 const COLLEGE_Q = ["What is the difference between a compiler and an interpreter?", "Explain the structure of a C program with an example.", "Explain data types and format specifiers in C.", "Explain the different types of operators in C with examples.", "Explain if, if-else, nested if and switch statements.", "Differentiate between while, do-while and for loops.", "What is an array? Explain one- and two-dimensional arrays.", "Explain string handling functions with examples.", "What is a pointer? Explain pointer arithmetic and double pointers.", "Differentiate between call by value and call by reference.", "What is recursion? Write a program to find the factorial using recursion.", "Explain storage classes: auto, register, static and extern.", "Differentiate between structure and union.", "Explain malloc(), calloc(), realloc() and free().", "Explain file handling functions in C with examples.", "Write a C program to check whether a number is prime.", "Write a C program to reverse a number / string and check for a palindrome.", "Write a C program to sort an array using bubble sort.", "Write a C program for matrix multiplication.", "Write a C program to find the Fibonacci series up to n terms.", "What are preprocessor directives? Explain #define and #include.", "What is a command line argument?"];
-function collegeView() {
-  const n = CL.name.trim();
-  return hdr("Your College 🎓") + `<div class="card"><h3>Enter your college name</h3><input class="field" id="cn" placeholder="e.g. Andhra Loyola College" value="${esc(CL.name)}" onkeydown="if(event.key==='Enter')showCollege()">
-  <div class="btns" style="margin:14px 0 0"><button class="btn ${CL.kind === "B.Tech" ? "" : "sec"}" onclick="CL.kind='B.Tech';render()">B.Tech</button><button class="btn ${CL.kind === "Degree" ? "" : "sec"}" onclick="CL.kind='Degree';render()">Degree</button><button class="btn" onclick="showCollege()">Show</button></div></div>
-  ${CL.shown && n ? `<div class="card"><h3>${esc(n)}</h3><p class="muted">${CL.kind} · C Programming</p><h3 style="margin-top:14px">⭐ Important questions</h3><ol style="padding-left:20px;line-height:1.6">${COLLEGE_Q.map((q) => `<li>${esc(q)}</li>`).join("")}</ol></div>
-  <div class="card"><h3>📄 Sample question paper</h3><pre style="white-space:pre-wrap;font-family:inherit;background:var(--card2);color:var(--text)">${esc(samplePaper(n))}</pre></div>` : ""}`;
+const saveCS = () => LS.set("college2", { state: CS.state, name: CS.name, kind: CS.kind, uni: CS.uni, set: CS.set });
+const apUnis = () => ((D.col && D.col.unis) || []).filter((u) => u.courses.includes(CS.kind));
+function paperHtml(p, college, uni) {
+  let n = 0;
+  const body = p.parts.map((pt) => { n = 0; return `<div class="pp-part"><div class="pp-ph">${esc(pt.name)}</div><div class="pp-note">${esc(pt.note)}</div>` +
+    (pt.units ? pt.units.map((u) => { n++; return `<div class="pp-unit">${esc(u.unit)}</div><div class="pp-q"><b>${n}.</b> (a) ${esc(u.either[0])}</div><div class="pp-or">OR</div><div class="pp-q"><b>&nbsp;&nbsp;&nbsp;</b> (b) ${esc(u.either[1])}</div>`; }).join("")
+      : pt.qs.map((q) => `<div class="pp-q"><b>${++n}.</b> ${esc(q)}</div>`).join("")) + `</div>`; }).join("");
+  return `<div class="paper" id="paper"><div class="pp-head"><div class="pp-uni">${esc(uni)}</div><div class="pp-col">${esc(college)}</div><div class="pp-course">${esc(p.course)}</div><div class="pp-title">${esc(p.title)}</div><div class="pp-meta"><span>Time: ${esc(p.time)}</span><span>Max. Marks: ${p.marks}</span></div></div>${body}<div class="pp-end">*** All the best ***</div></div>`;
 }
-window.showCollege = () => { CL.name = $("#cn").value; LS.set("college", CL.name); CL.shown = true; if (!CL.name.trim()) toast("Enter your college name"); render(); };
+function paperText(p, college, uni) {
+  let n = 0; const L = [uni.toUpperCase(), college, p.course, p.title, `Time: ${p.time}      Max. Marks: ${p.marks}`, ""];
+  p.parts.forEach((pt) => { n = 0; L.push(pt.name, pt.note, ""); if (pt.units) pt.units.forEach((u) => { n++; L.push(u.unit, `${n}. (a) ${u.either[0]}`, "   OR", `   (b) ${u.either[1]}`, ""); }); else pt.qs.forEach((q) => L.push(`${++n}. ${q}`)); L.push(""); });
+  return L.join("\n");
+}
+function collegeView() {
+  const ap = CS.state === "Andhra Pradesh", n = CS.name.trim(), col = D.col;
+  const unis = apUnis(); if (ap && !unis.find((u) => u.id === CS.uni) && unis.length) CS.uni = unis[0].id;
+  const form = `<div class="card"><h3>Your college details</h3>
+  <label class="muted">State</label><select class="field" onchange="CS.state=this.value;CS.shown=false;saveCS();render()"><option ${ap ? "selected" : ""}>Andhra Pradesh</option><option ${ap ? "" : "selected"}>Other state</option></select>
+  <label class="muted">College name</label><input class="field" id="cn" placeholder="Enter your college name" value="${esc(CS.name)}" oninput="CS.name=this.value">
+  <label class="muted">Course</label><div class="btns" style="margin:6px 0 12px"><button class="btn ${CS.kind === "B.Tech" ? "" : "sec"}" onclick="CS.kind='B.Tech';CS.shown=false;render()">B.Tech</button><button class="btn ${CS.kind === "Degree" ? "" : "sec"}" onclick="CS.kind='Degree';CS.shown=false;render()">Degree</button></div>
+  ${ap && col ? `<label class="muted">Your university</label><select class="field" onchange="CS.uni=this.value;CS.shown=false;saveCS()">${unis.map((u) => `<option value="${u.id}" ${u.id === CS.uni ? "selected" : ""}>${esc(u.name)}</option>`).join("")}</select>` : ""}
+  <div class="btns" style="margin:14px 0 0"><button class="btn" style="width:100%" onclick="showCollege()">Show</button></div></div>`;
+  if (!CS.shown || !n) return hdr("Your College 🎓") + form;
+  const kind = CS.kind;
+  if (ap && col) {
+    const u = col.unis.find((x) => x.id === CS.uni) || col.unis[0], papers = col.papers[kind], p = papers[CS.set % papers.length];
+    return hdr("Your College 🎓") + form + `<div class="card"><h3>${esc(n)}</h3><p class="muted">${esc(kind)} · ${esc(u.short)} · C Programming</p></div>
+    <div class="card"><h3>📄 Model question paper</h3><p class="muted" style="font-size:13px">Prepared in the typical exam pattern of ${esc(kind)} C Programming. It is a practice (model) paper, not an official past paper of the university.</p>
+    <div class="btns" style="margin:10px 0">${papers.map((_, i) => `<button class="btn ${i === CS.set % papers.length ? "" : "sec"}" onclick="CS.set=${i};saveCS();render()">Paper ${i + 1}</button>`).join("")}</div>
+    ${paperHtml(p, n, u.name)}
+    <div class="btns" style="margin:14px 0 0"><button class="btn" onclick="printPaper()">⬇️ Download PDF</button><button class="btn sec" onclick="downloadTxt()">⬇️ Download text</button></div></div>
+    <div class="card"><h3>⭐ Important questions</h3>${col.important[kind].map((g) => `<h4 style="margin:14px 0 6px;color:var(--accent)">${esc(g.unit)}</h4><ol style="padding-left:20px;line-height:1.6;margin:0">${g.qs.map((q) => `<li>${esc(q)}</li>`).join("")}</ol>`).join("")}
+    <div class="btns" style="margin:14px 0 0"><button class="btn sec" onclick="downloadQ()">⬇️ Download questions</button></div></div>`;
+  }
+  return hdr("Your College 🎓") + form + `<div class="card"><h3>${esc(n)}</h3><p class="muted">${esc(kind)} · C Programming</p><h3 style="margin-top:14px">⭐ Important questions</h3><ol style="padding-left:20px;line-height:1.6">${COLLEGE_Q.map((q) => `<li>${esc(q)}</li>`).join("")}</ol>
+  <div class="btns" style="margin:14px 0 0"><button class="btn sec" onclick="downloadQ()">⬇️ Download questions</button></div></div>
+  <div class="card"><h3>📄 Sample question paper</h3><pre style="white-space:pre-wrap;font-family:inherit;background:var(--card2);color:var(--text)">${esc(samplePaper(n))}</pre><div class="btns" style="margin:14px 0 0"><button class="btn sec" onclick="downloadTxt()">⬇️ Download text</button></div></div>`;
+}
+window.showCollege = () => { if (!CS.name.trim()) return toast("Enter your college name"); CS.shown = true; if (CS.state === "Andhra Pradesh" && D.col) { const i = D.col.unis.findIndex((x) => x.id === CS.uni); CS.set = Math.max(i, 0) % 3; } saveCS(); render(); scrollTo(0, 0); };
+window.printPaper = () => window.print();
+function saveFile(name, text) { try { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type: "text/plain;charset=utf-8" })); a.download = name; document.body.appendChild(a); a.click(); a.remove(); toast("Downloaded"); } catch { toast("Download not supported here"); } }
+window.downloadTxt = () => {
+  const n = CS.name.trim(), col = D.col;
+  if (CS.state === "Andhra Pradesh" && col) { const u = col.unis.find((x) => x.id === CS.uni) || col.unis[0], ps = col.papers[CS.kind]; saveFile(`C_Model_Paper_${CS.set % ps.length + 1}.txt`, paperText(ps[CS.set % ps.length], n, u.name)); }
+  else saveFile("C_Sample_Paper.txt", samplePaper(n));
+};
+window.downloadQ = () => {
+  const col = D.col, ap = CS.state === "Andhra Pradesh" && col;
+  const t = ap ? col.important[CS.kind].map((g) => g.unit + "\n" + g.qs.map((q, i) => `${i + 1}. ${q}`).join("\n")).join("\n\n") : COLLEGE_Q.map((q, i) => `${i + 1}. ${q}`).join("\n");
+  saveFile("C_Important_Questions.txt", `${CS.name.trim()} - ${CS.kind} - Important Questions (C Programming)\n\n` + t);
+};
 function samplePaper(n) {
-  const dg = CL.kind === "Degree";
-  return `${n.toUpperCase()}\n${CL.kind.toUpperCase()} — PROGRAMMING IN C (SAMPLE PAPER)\nTime: 3 Hours                    Max Marks: 70\n\nSECTION A — Answer any FIVE (5 × 4 = 20)\n1. What is a token? Name the types of tokens in C.\n2. Differentiate between a compiler and an interpreter.\n3. List the data types and format specifiers in C.\n4. What is the difference between ++a and a++?\n5. Define an array. How is a 2-D array declared?\n6. What is a pointer? Give its syntax.\n7. Explain the use of break and continue.\n8. What is recursion?\n\nSECTION B — Answer any FIVE (5 × 10 = 50)\n9. Explain the structure of a C program with an example.\n10. Explain all operators in C with precedence and associativity.\n11. Explain the control statements (if, if-else, switch) with programs.\n12. Explain looping statements with suitable programs.\n13. Write a program to sort an array using bubble sort.\n14. Explain string functions: strlen, strcpy, strcat, strcmp.\n15. Explain pointers and call by value / call by reference with programs.\n16. Explain structures, unions and ${dg ? "enumerated types" : "nested structures"} with examples.\n17. Explain dynamic memory allocation functions.\n18. Explain file handling operations in C.`;
+  const dg = CS.kind === "Degree";
+  return `${n.toUpperCase()}\n${CS.kind.toUpperCase()} — PROGRAMMING IN C (SAMPLE PAPER)\nTime: 3 Hours                    Max Marks: 70\n\nSECTION A — Answer any FIVE (5 × 4 = 20)\n1. What is a token? Name the types of tokens in C.\n2. Differentiate between a compiler and an interpreter.\n3. List the data types and format specifiers in C.\n4. What is the difference between ++a and a++?\n5. Define an array. How is a 2-D array declared?\n6. What is a pointer? Give its syntax.\n7. Explain the use of break and continue.\n8. What is recursion?\n\nSECTION B — Answer any FIVE (5 × 10 = 50)\n9. Explain the structure of a C program with an example.\n10. Explain all operators in C with precedence and associativity.\n11. Explain the control statements (if, if-else, switch) with programs.\n12. Explain looping statements with suitable programs.\n13. Write a program to sort an array using bubble sort.\n14. Explain string functions: strlen, strcpy, strcat, strcmp.\n15. Explain pointers and call by value / call by reference with programs.\n16. Explain structures, unions and ${dg ? "enumerated types" : "nested structures"} with examples.\n17. Explain dynamic memory allocation functions.\n18. Explain file handling operations in C.`;
 }
 
 // ---------- boot ----------
@@ -352,6 +396,7 @@ function samplePaper(n) {
     const [th, pq, pr, iq] = await Promise.all([jget("/data/theory.json"), jget("/data/practice_q.json"), jget("/data/programs.json"), jget("/data/interview_q.json")]);
     D.theory = th; D.pq = pq; D.prog = pr; D.iq = iq;
     try { D.ia = await jget("/data/interview_a.json"); } catch {}
+    try { D.col = await jget("/data/college.json"); } catch {}
   } catch (e) { $("#app").innerHTML = `<div class="card">Could not load the study material. Check your internet connection and reload.</div>`; return; }
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
   render();
