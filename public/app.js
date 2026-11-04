@@ -205,13 +205,27 @@ window.pick = (id, k) => { const t = D.theory.find((x) => x.id === id); QZ.picke
 // ---------- PROGRAMS ----------
 function progTopics() {
   const P = D.pq.topics, have = {}; D.prog.forEach((x) => (have[x.topic] = (have[x.topic] || 0) + 1));
-  return hdr("Programs · 2000") + `<div class="list">${P.map((t) => `<button class="row" onclick="go('plist',${t.no})"><div class="em">${String(t.no).padStart(2, "0")}</div><div class="tx"><b>${esc(t.title)}</b><small>${t.level} · Q${t.range[0]}–${t.range[1]}${have[t.no] ? ` · ${have[t.no]} with solutions` : ""}</small></div></button>`).join("")}</div>`;
+  const total = D.pq.items.length;
+  return hdr("Programs · " + total) + `<div class="list"><button class="row" onclick="PS.topic=0;PS.q='';PS.page=0;go('plist',0)"><div class="em">🔎</div><div class="tx"><b>All programs</b><small>Search across all ${total}</small></div></button>${P.map((t) => `<button class="row" onclick="PS.topic=${t.no};PS.q='';PS.page=0;go('plist',${t.no})"><div class="em">${String(t.no).padStart(2, "0")}</div><div class="tx"><b>${esc(t.title)}</b><small>${t.level} · Q${t.range[0]}–${t.range[1]}${have[t.no] ? ` · ${have[t.no]} with solutions` : ""}</small></div></button>`).join("")}</div>`;
 }
-let PS = { page: 0 };
+const PS = { topic: 0, q: "", page: 0 }, PPER = 25;
+function plistItems() {
+  const terms = PS.q.toLowerCase().split(/\s+/).filter(Boolean), base = D.pq.items.filter((x) => !PS.topic || x.topic === PS.topic);
+  if (!terms.length) return base;
+  const code = new Map(D.prog.map((p) => [p.id, p.code.toLowerCase()]));
+  const inQ = base.filter((x) => { const t = (x.id + " " + x.q).toLowerCase(); return terms.every((w) => t.includes(w)); });
+  const seen = new Set(inQ.map((x) => x.id));
+  const inCode = base.filter((x) => !seen.has(x.id) && terms.every((w) => ((x.q + " " + (code.get(x.id) || "")).toLowerCase()).includes(w)));
+  return inQ.concat(inCode);
+}
 function progList() {
-  const t = D.pq.topics.find((x) => x.no === S.arg), items = D.pq.items.filter((x) => x.topic === t.no);
-  const solved = new Map(D.prog.map((p) => [p.id, p]));
-  return hdr(esc(t.title)) + `<div class="list">${items.map((x) => `<button class="row" onclick="go('prog',${x.id})"><div class="em" style="font-size:14px;font-weight:700">${x.id}</div><div class="tx"><b style="font-weight:500">${esc(x.q)}</b></div><span class="badge ${S.done[x.id] ? "ok" : ""}">${S.done[x.id] ? "✓" : solved.has(x.id) ? "Code" : "Try"}</span></button>`).join("")}</div>`;
+  PS.topic = S.arg || 0;
+  const t = PS.topic ? D.pq.topics.find((x) => x.no === PS.topic) : null, all = plistItems(), pages = Math.max(1, Math.ceil(all.length / PPER));
+  PS.page = Math.min(PS.page, pages - 1);
+  const items = all.slice(PS.page * PPER, PS.page * PPER + PPER), solved = new Set(D.prog.map((p) => p.id));
+  return hdr(t ? esc(t.title) : "All programs") + `<input class="field search" placeholder="🔍 Search programs… (e.g. palindrome)" value="${esc(PS.q)}" onchange="PS.q=this.value;PS.page=0;render()">
+  <div class="list">${items.map((x) => `<button class="row" onclick="go('prog',${x.id})"><div class="em" style="font-size:14px;font-weight:700">${x.id}</div><div class="tx"><b style="font-weight:500">${esc(x.q)}</b></div><span class="badge ${S.done[x.id] ? "ok" : ""}">${S.done[x.id] ? "✓" : solved.has(x.id) ? "Code" : "Try"}</span></button>`).join("") || `<p class="muted" style="padding:0 18px">No programs found.</p>`}</div>
+  <div class="pager"><button class="btn sec" ${PS.page ? "" : "disabled"} onclick="PS.page--;render();scrollTo(0,0)">← Prev</button><span class="muted">${PS.page + 1} / ${pages}</span><button class="btn sec" ${PS.page < pages - 1 ? "" : "disabled"} onclick="PS.page++;render();scrollTo(0,0)">Next →</button></div>`;
 }
 function progView() {
   const q = D.pq.items.find((x) => x.id === S.arg), p = D.prog.find((x) => x.id === q.id);
@@ -219,7 +233,7 @@ function progView() {
   return hdr(`Program ${q.id}`) + `<div class="card"><div class="q">${esc(q.q)}</div></div>` + (p
     ? `<div class="card"><h3>💻 Code</h3><pre>${hl(p.code)}</pre>${p.stdin ? `<div class="muted">Sample input:</div><pre>${esc(p.stdin)}</pre>` : ""}<h3>📤 Sample output</h3><pre class="out">${esc(p.output)}</pre></div>`
     : `<div class="card"><p class="muted">The solution for this question is being added. Try writing it yourself in the compiler!</p></div>`) +
-    `<div class="btns">${p ? `<button class="btn" onclick="runProg(${q.id})">▶ Run</button><button class="btn sec" onclick="openIn(${q.id})">✏️ Edit & run</button>` : `<button class="btn" onclick="openIn(${q.id})">✏️ Write it yourself</button>`}</div><div class="btns">${q.id > 1 ? `<button class="btn sec" onclick="go('prog',${q.id - 1},false)">← Prev</button>` : ""}${q.id < 2000 ? `<button class="btn sec" onclick="go('prog',${q.id + 1},false)">Next →</button>` : ""}</div>`;
+    `<div class="btns">${p ? `<button class="btn" onclick="runProg(${q.id})">▶ Run</button><button class="btn sec" onclick="openIn(${q.id})">✏️ Edit & run</button>` : `<button class="btn" onclick="openIn(${q.id})">✏️ Write it yourself</button>`}</div><div class="btns">${q.id > 1 ? `<button class="btn sec" onclick="go('prog',${q.id - 1},false)">← Prev</button>` : ""}${q.id < D.pq.items[D.pq.items.length - 1].id ? `<button class="btn sec" onclick="go('prog',${q.id + 1},false)">Next →</button>` : ""}</div>`;
 }
 window.runProg = (id) => { const p = D.prog.find((x) => x.id === id); S.ctx = id; termOpen(p.code, `Program ${id}`, id); };
 window.openIn = (id) => { const p = D.prog.find((x) => x.id === id); S.ctx = id; S.code = { code: p ? p.code : `#include <stdio.h>\n\nint main(void)\n{\n    /* ${D.pq.items.find((x) => x.id === id).q.replace(/\*\//g, "")} */\n\n    return 0;\n}\n`, stdin: "" }; go("compiler", "ctx"); };
