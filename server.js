@@ -163,9 +163,16 @@ function serve(req, res) {
   const root = isData ? path.join(__dirname, "data") : path.join(__dirname, "public");
   const file = path.normalize(path.join(root, isData ? p.slice(5) : p));
   if (!file.startsWith(root + path.sep) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); return res.end("Not found"); }
-  res.writeHead(200, { "Content-Type": MIME[path.extname(file)] || "application/octet-stream", "Cache-Control": "no-cache" });
+  const type = MIME[path.extname(file)] || "application/octet-stream", st = fs.statSync(file);
+  if (/gzip/.test(req.headers["accept-encoding"] || "") && /^(text\/|application\/json|text\/javascript)/.test(type) && st.size > 2048) {
+    const key = file + st.mtimeMs; let gz = GZ.get(key);
+    if (!gz) { gz = require("zlib").gzipSync(fs.readFileSync(file)); GZ.set(key, gz); }
+    res.writeHead(200, { "Content-Type": type, "Content-Encoding": "gzip", "Cache-Control": "no-cache" }); return res.end(gz);
+  }
+  res.writeHead(200, { "Content-Type": type, "Cache-Control": "no-cache" });
   fs.createReadStream(file).pipe(res);
 }
+const GZ = new Map();
 // ---------- Google Sign-In: verify the ID token with Google ----------
 function googleLogin(body) {
   return new Promise((resolve) => {
