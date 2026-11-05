@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privacy Policy - Learn C Language</title>
+<style>body{font:16px/1.6 system-ui,sans-serif;max-width:760px;margin:0 auto;padding:24px 16px;color:#2a1a3a;background:#fff8fc}h1{color:#6b2a8f}h2{color:#8a3fb0;margin-top:28px}a{color:#8a3fb0}</style></head>
+<body>
+<h1>Privacy Policy</h1>
+<p><b>App:</b> Learn C Language &nbsp;|&nbsp; <b>Last updated:</b> 5 November 2026</p>
+<p>Learn C Language ("the app") helps students learn the C programming language with theory notes, practice programs, an online C compiler, interview questions and exam papers. This policy explains what information the app handles.</p>
+
+<h2>Information we collect</h2>
+<ul>
+<li><b>Email address and basic profile:</b> if you sign in with Google or with an email OTP, we receive your email address (and, for Google, your name) to identify your account.</li>
+<li><b>Learning progress and settings:</b> your progress, theme, selected college and similar preferences are stored on your own device (browser local storage).</li>
+<li><b>Code you run in the compiler:</b> the C code and input you submit is sent to our server only to compile and run it and show you the output. It is not used for any other purpose.</li>
+</ul>
+
+<h2>How we use it</h2>
+<ul>
+<li>To sign you in and keep your session.</li>
+<li>To send you a one-time password (OTP) by email when you ask for one.</li>
+<li>To run the code you submit in the compiler.</li>
+</ul>
+
+<h2>Third-party services</h2>
+<ul>
+<li><b>Google Sign-In</b> (to sign in with your Google account).</li>
+<li><b>Brevo</b> (to deliver OTP emails).</li>
+<li><b>Render</b> (hosting of the app and server).</li>
+</ul>
+<p>These services process data under their own privacy policies.</p>
+
+<h2>What we do not do</h2>
+<ul>
+<li>We do not sell or rent your personal information.</li>
+<li>We do not show advertisements or use advertising trackers.</li>
+<li>We do not knowingly collect information from children under 13.</li>
+</ul>
+
+<h2>Data retention and deletion</h2>
+<p>Progress stored on your device can be removed by clearing the app's data. To request deletion of any account information held on our server, email us at the address below and we will remove it.</p>
+
+<h2>Security</h2>
+<p>The app is served over HTTPS. No method of transmission or storage is completely secure, but we take reasonable steps to protect your information.</p>
+
+<h2>Changes to this policy</h2>
+<p>We may update this policy from time to time. The latest version is always available at this page.</p>
+
+<h2>Contact</h2>
+<p>Questions or deletion requests: <a href="mailto:manohararepalli416@gmail.com">manohararepalli416@gmail.com</a></p>
+</body></html>
