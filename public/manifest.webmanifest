@@ -1,3 +1,82 @@
-{ "name": "Learn C Language", "short_name": "Learn C", "start_url": "/", "display": "standalone",
-  "background_color": "#1d1230", "theme_color": "#1d1230",
-  "icons": [ { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" } ] }
+{
+  "id": "/",
+  "name": "Learn C Language",
+  "short_name": "Learn C",
+  "description": "Learn C programming with theory notes, 2000+ practice programs with output, an online C compiler, interview questions with answers and exam papers.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1d1230",
+  "theme_color": "#1d1230",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "education",
+    "productivity"
+  ],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/phone-1-home.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Home with progress and levels"
+    },
+    {
+      "src": "screenshots/phone-2-theory.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Theory notes"
+    },
+    {
+      "src": "screenshots/phone-3-programs.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Programs with code and output"
+    },
+    {
+      "src": "screenshots/phone-4-interview.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Interview questions with answers"
+    },
+    {
+      "src": "screenshots/wide-1-home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Learn C Language"
+    }
+  ]
+}
