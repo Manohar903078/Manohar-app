@@ -149,4 +149,4 @@ table.nt.wide{min-width:560px}table.nt.wide td:first-child{white-space:nowrap}
 @media print{body *{visibility:hidden}.paper,.paper *{visibility:visible}.paper{position:absolute;left:0;top:0;width:100%;box-shadow:none;border:0;border-radius:0;font-size:13pt}}
 
 /* app-like: no pinch / double-tap zoom, no sideways drift */
-html,body{touch-action:manipulation;overflow-x:hidden;-webkit-text-size-adjust:100%}
+html,body{touch-action:manipulation}
