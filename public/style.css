@@ -147,3 +147,6 @@ table.nt.wide{min-width:560px}table.nt.wide td:first-child{white-space:nowrap}
 .pp-ph{text-align:center;font-weight:700;margin-top:12px;text-decoration:underline}.pp-note{text-align:center;font-style:italic;font-size:13px;margin:4px 0 8px}
 .pp-unit{font-weight:700;font-size:12.5px;margin:10px 0 4px;color:#444}.pp-q{margin:5px 0}.pp-or{text-align:center;font-weight:700;margin:4px 0}.pp-end{text-align:center;margin-top:16px;font-style:italic}
 @media print{body *{visibility:hidden}.paper,.paper *{visibility:visible}.paper{position:absolute;left:0;top:0;width:100%;box-shadow:none;border:0;border-radius:0;font-size:13pt}}
+
+/* app-like: no pinch / double-tap zoom, no sideways drift */
+html,body{touch-action:manipulation;overflow-x:hidden;-webkit-text-size-adjust:100%}
