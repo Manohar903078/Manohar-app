@@ -150,5 +150,3 @@ table.nt.wide{min-width:560px}table.nt.wide td:first-child{white-space:nowrap}
 
 /* app-like: no pinch / double-tap zoom, no sideways drift */
 html,body{touch-action:manipulation;overflow-x:hidden;-webkit-text-size-adjust:100%}
-
-html,body{text-rendering:geometricPrecision;font-kerning:normal;font-variant-ligatures:none}
