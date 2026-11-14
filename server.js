@@ -156,7 +156,7 @@ function stopRun(body) { const s = getSession(body); if (s) endSession(s, "[Stop
 
 // ---------- static files + routing ----------
 const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".json": "application/json",
-  ".png": "image/png", ".svg": "image/svg+xml", ".webmanifest": "application/manifest+json", ".ico": "image/x-icon" };
+  ".png": "image/png", ".svg": "image/svg+xml", ".webmanifest": "application/manifest+json", ".ico": "image/x-icon", ".woff": "font/woff", ".woff2": "font/woff2" };
 function serve(req, res) {
   let p = decodeURIComponent(req.url.split("?")[0]); if (p === "/") p = "/index.html";
   const isData = p.startsWith("/data/");
