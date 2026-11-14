@@ -24,7 +24,7 @@ const progress = () => {
   return Math.min(100, Math.round(t * 60 + p * 40));
 };
 const LEVELS = ["Seedling", "Beginner", "Explorer", "Coder", "Builder", "Problem Solver", "Debugger", "Specialist", "Expert", "Master", "C Queen"];
-const level = () => { const p = progress(), i = Math.min(Math.floor(p / 10), LEVELS.length - 1); return { n: i + 1, name: LEVELS[i], next: i + 1 < LEVELS.length ? `Level ${i + 2} · ${LEVELS[i + 1]}` : "Top level · " + LEVELS[i] }; };
+const level = () => { const p = progress(); return { n: Math.floor(p / 10) + (p >= 100 ? 0 : 1), name: LEVELS[Math.floor(p / 10)] }; };
 
 // ---------- syntax highlight ----------
 function hl(code) {
@@ -151,7 +151,7 @@ window.verify = async () => {
 function home() {
   const p = progress(), lv = level();
   const l = S.last;
-  return `<div class="hero"><div class="hero-row"><div class="ring" style="--p:${p}"><div>${p}%<small style="display:block;font-size:10px;opacity:.8;line-height:1.1">Lv ${lv.n}</small></div></div><div><h1>Learn C Language</h1><span class="lvl">${lv.next}</span></div></div></div>
+  return `<div class="hero"><div class="hero-row"><div class="ring" style="--p:${p}"><div>${p}%</div></div><div><h1>Learn C Language</h1><span class="lvl">Level ${lv.n} · ${lv.name}</span></div></div></div>
   <div class="toolbar"><span class="pill">✨ Hi, ${esc(S.user.email.split("@")[0])}</span><div class="icons"><button class="ic" onclick="go('settings')">⚙️</button><button class="ic" onclick="location.href='mailto:support@learnc.app?subject=Learn C feedback'">✉️</button><button class="ic" onclick="share()">↗️</button></div></div>
   <div class="grid">
     <button class="tile" onclick="go('theory')">${ART.book}<b>Theory Notes</b><em>${Object.keys(S.theory).length}/${D.theory.length} topics passed</em></button>
