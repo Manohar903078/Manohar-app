@@ -1,16 +1,16 @@
-//..................... Learn C Language - backend with ZERO npm dependencies (Node 18+).......................
-//........ Serves the app, sends OTP e-mails through Gmail SMTP, compiles C code with gcc..........
+// Learn C Language - backend with ZERO npm dependencies (Node 18+).
+// Serves the app, sends OTP e-mails through Gmail SMTP, compiles C code with gcc.
 const http = require("http"), tls = require("tls"), crypto = require("crypto");
 const fs = require("fs"), os = require("os"), path = require("path");
 const { execFile } = require("child_process");
 
 const PORT = process.env.PORT || 3000;
-const SMTP_USER = process.env.SMTP_USER || "";                       // Gmail address....... login.....
-const SMTP_PASS = (process.env.SMTP_PASS || "").replace(/\s+/g, ""); // Gmail APP PASSWORD (env var only).....D...
+const SMTP_USER = process.env.SMTP_USER || "";                       // Gmail address
+const SMTP_PASS = (process.env.SMTP_PASS || "").replace(/\s+/g, ""); // Gmail APP PASSWORD (env var only)
 const APP_NAME = "Learn C Language";
 const GOOGLE_CLIENT_ID = (process.env.GOOGLE_CLIENT_ID || "").trim();  // Google Sign-In "Web client ID" (public value)
-const BREVO_KEY = process.env.BREVO_API_KEY || "";                    // Brevo API key (env var only)...future plane....
-const MAIL_FROM = process.env.MAIL_FROM || SMTP_USER;                 // sender e-mail verified in Brevo..future plane....
+const BREVO_KEY = process.env.BREVO_API_KEY || "";                    // Brevo API key (env var only)
+const MAIL_FROM = process.env.MAIL_FROM || SMTP_USER;                 // sender e-mail verified in Brevo
 const MAIL_ON = !!(BREVO_KEY && MAIL_FROM) || !!(SMTP_USER && SMTP_PASS);
 
 // ---------- Brevo HTTPS API (works on Render free: no SMTP ports needed) ----------
@@ -189,13 +189,39 @@ function googleLogin(body) {
     }).on("error", () => resolve([502, { error: "Could not reach Google. Try again." }])).on("timeout", function () { this.destroy(); });
   });
 }
-const routes = { "/api/google": googleLogin, "/api/send-otp": sendOtp, "/api/verify-otp": async (b) => verifyOtp(b), "/api/run/start": startRun, "/api/run/poll": pollRun, "/api/run/input": async (b) => inputRun(b), "/api/run/stop": async (b) => stopRun(b) };
+// ---------- AI CHAT (keys only from environment variables) ----------
+const AI_KEY = (process.env.AI_API_KEY || "").trim(), AI_PROVIDER = (process.env.AI_PROVIDER || "anthropic").trim().toLowerCase();
+const AI_BASE = (process.env.AI_BASE_URL || (AI_PROVIDER === "openai" ? "https://api.openai.com/v1" : "https://api.anthropic.com")).replace(/\/+$/, "");
+const AI_MODEL = (process.env.AI_MODEL || (AI_PROVIDER === "openai" ? "gpt-4o-mini" : "claude-haiku-4-5")).trim();
+const CHAT_SYS = "You are the friendly study assistant inside the 'Learn C Language' app. Help with C programming and general study questions. Reply in the same language the user writes (English, Telugu, or Telugu typed in English letters). Keep answers short, simple, with small code examples when useful.";
+const chatHits = new Map();
+const withCtx = (c) => CHAT_SYS + (c ? "\n\nUse these notes from the app when they are relevant:\n" + String(c).slice(0, 3500) : "");
+async function chat(b, req) {
+  if (!AI_KEY) return [503, { error: "off" }];
+  const ip = (req.headers["x-forwarded-for"] || req.socket.remoteAddress || "").split(",")[0].trim(), now = Date.now();
+  const h = (chatHits.get(ip) || []).filter((t) => now - t < 60000); if (h.length >= 12) return [429, { error: "Too many messages. Please wait a minute." }]; h.push(now); chatHits.set(ip, h);
+  const msgs = (Array.isArray(b.messages) ? b.messages : []).slice(-10).map((m) => ({ role: m.role === "assistant" ? "assistant" : "user", content: String(m.content || "").slice(0, 2000) })).filter((m) => m.content);
+  if (!msgs.length || msgs[msgs.length - 1].role !== "user") return [400, { error: "No question." }];
+  try {
+    let r, j, reply;
+    if (AI_PROVIDER === "openai") {
+      r = await fetch(AI_BASE + "/chat/completions", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + AI_KEY }, body: JSON.stringify({ model: AI_MODEL, max_tokens: 700, messages: [{ role: "system", content: withCtx(b.context) }, ...msgs] }), signal: AbortSignal.timeout(45000) });
+      j = await r.json(); reply = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
+    } else {
+      r = await fetch(AI_BASE + "/v1/messages", { method: "POST", headers: { "Content-Type": "application/json", "x-api-key": AI_KEY, "anthropic-version": "2023-06-01" }, body: JSON.stringify({ model: AI_MODEL, max_tokens: 700, system: withCtx(b.context), messages: msgs }), signal: AbortSignal.timeout(45000) });
+      j = await r.json(); reply = j.content && j.content.map((c) => c.text || "").join("");
+    }
+    if (!r.ok || !reply) { console.log("chat error", r.status, JSON.stringify(j).slice(0, 200)); return [502, { error: "The AI is not reachable right now. Please try again." }]; }
+    return [200, { reply }];
+  } catch (e) { console.log("chat exception", e.message); return [502, { error: "The AI is not reachable right now. Please try again." }]; }
+}
+const routes = { "/api/chat": chat,  "/api/google": googleLogin, "/api/send-otp": sendOtp, "/api/verify-otp": async (b) => verifyOtp(b), "/api/run/start": startRun, "/api/run/poll": pollRun, "/api/run/input": async (b) => inputRun(b), "/api/run/stop": async (b) => stopRun(b) };
 http.createServer((req, res) => {
   if (req.method === "POST" && routes[req.url]) {
     let data = ""; req.on("data", (c) => { data += c; if (data.length > 200000) req.destroy(); });
     req.on("end", async () => {
       let body = {}; try { body = JSON.parse(data || "{}"); } catch {}
-      const [status, json] = await routes[req.url](body);
+      const [status, json] = await routes[req.url](body, req);
       res.writeHead(status, { "Content-Type": "application/json" }); res.end(JSON.stringify(json));
     });
   } else if (req.method === "GET" && req.url === "/api/config") { res.writeHead(200, { "Content-Type": "application/json" }); res.end(JSON.stringify({ googleClientId: GOOGLE_CLIENT_ID })); }
