@@ -1,16 +1,16 @@
-// Learn C Language - backend with ZERO npm dependencies (Node 18+).
-// Serves the app, sends OTP e-mails through Gmail SMTP, compiles C code with gcc.
+//..................... Learn C Language - backend with ZERO npm dependencies (Node 18+).......................
+//........ Serves the app, sends OTP e-mails through Gmail SMTP, compiles C code with gcc..........
 const http = require("http"), tls = require("tls"), crypto = require("crypto");
 const fs = require("fs"), os = require("os"), path = require("path");
 const { execFile } = require("child_process");
 
 const PORT = process.env.PORT || 3000;
-const SMTP_USER = process.env.SMTP_USER || "";                       // Gmail address
-const SMTP_PASS = (process.env.SMTP_PASS || "").replace(/\s+/g, ""); // Gmail APP PASSWORD (env var only)
+const SMTP_USER = process.env.SMTP_USER || "";                       // Gmail address....... login.....
+const SMTP_PASS = (process.env.SMTP_PASS || "").replace(/\s+/g, ""); // Gmail APP PASSWORD (env var only).....D...
 const APP_NAME = "Learn C Language";
 const GOOGLE_CLIENT_ID = (process.env.GOOGLE_CLIENT_ID || "").trim();  // Google Sign-In "Web client ID" (public value)
-const BREVO_KEY = process.env.BREVO_API_KEY || "";                    // Brevo API key (env var only)
-const MAIL_FROM = process.env.MAIL_FROM || SMTP_USER;                 // sender e-mail verified in Brevo
+const BREVO_KEY = process.env.BREVO_API_KEY || "";                    // Brevo API key (env var only)...future plane....
+const MAIL_FROM = process.env.MAIL_FROM || SMTP_USER;                 // sender e-mail verified in Brevo..future plane....
 const MAIL_ON = !!(BREVO_KEY && MAIL_FROM) || !!(SMTP_USER && SMTP_PASS);
 
 // ---------- Brevo HTTPS API (works on Render free: no SMTP ports needed) ----------
