@@ -175,7 +175,107 @@
   ["reverse number string","To reverse a number: repeatedly take the last digit (n % 10), add it to rev = rev * 10 + digit, and remove it with n = n / 10. To reverse a string swap characters from both ends."],
   ["pattern star pyramid","Pattern programs use nested loops: the outer loop is for rows and the inner loop for columns (stars/numbers per row). Example right triangle: row i prints i stars."]
   ,
-  ["pointer double triple","A pointer to pointer (double pointer) stores the address of another pointer: int a = 10; int *p = &a; int **pp = &p; Then *pp is p and **pp is the value 10."]
+  ["pointer double triple","A pointer to pointer (double pointer) stores the address of another pointer: int a = 10; int *p = &a; int **pp = &p; Then *pp is p and **pp is the value 10."],
+  ["advantages disadvantages merits c language", "Advantages of C: fast, portable, simple syntax, close to hardware, rich library, good for system programming. Disadvantages: no object-oriented features, no automatic memory management or garbage collection, no bounds checking on arrays, no exception handling, and pointers can cause bugs."],
+  ["applications uses of c language where used", "C is used to build operating systems (UNIX, Linux, Windows kernel), embedded systems (washing machines, TV remotes, cars), compilers, databases, device drivers, and games."],
+  ["c vs c++ difference", "C is procedure-oriented (functions); C++ adds object-oriented features (classes, objects, inheritance, polymorphism, templates). C has no function overloading or references; C++ has both. C++ is mostly a superset of C."],
+  ["procedure oriented object oriented difference pop oop", "Procedure-oriented programming (C) divides a program into functions and data is shared globally. Object-oriented programming (C++, Java) groups data and functions into objects and supports encapsulation, inheritance and polymorphism."],
+  ["structured programming", "Structured programming builds a program from three control structures: sequence, selection (if/switch) and iteration (loops), and divides it into functions. It avoids goto and makes programs easy to read and debug. C is a structured language."],
+  ["c standards ansi c99 c11", "C has been standardized: ANSI C / C89 (1989), C99 (added // comments, long long, inline), C11 and C17. ANSI C is the classic standard taught in most colleges."],
+  ["middle level language why", "C is called a middle-level language because it combines the features of high-level languages (readable, functions, structures) with low-level features (pointers, bit operations, direct memory access)."],
+  ["computer what input output devices cpu", "A computer takes input (keyboard, mouse), processes it in the CPU (ALU + control unit), stores data in memory (RAM, hard disk), and gives output (monitor, printer)."],
+  ["ram rom difference memory", "RAM is temporary (volatile) memory used while programs run; its data is lost when power goes off. ROM is permanent (non-volatile) memory that keeps its data, usually holding start-up instructions."],
+  ["memory layout program segments text data bss", "A running C program's memory has: Text (code), Data (initialized globals/statics), BSS (uninitialized globals/statics, set to 0), Heap (dynamic memory, grows up) and Stack (local variables and function calls, grows down)."],
+  ["statement expression", "An expression is a combination of variables, constants and operators that gives a value (a + b * 2). A statement is a complete instruction ending with a semicolon (c = a + b;). A block is statements inside { }."],
+  ["whitespace blank space tab", "White space (space, tab, new line) separates tokens in C and is ignored by the compiler. You can write several statements on one line or one statement on several lines."],
+  ["case sensitive", "C is case sensitive: main and Main are different, and so are Sum and sum. All keywords must be lowercase."],
+  ["compile time error link error difference", "Compile-time (syntax) errors are found while compiling (missing ;, undeclared variable). Linker errors happen when a function is declared but its code is not found (undefined reference). Run-time errors happen while the program runs (divide by zero, segmentation fault)."],
+  ["warning error difference", "An error stops compilation; no .exe is created. A warning is a possible problem (like an unused variable or a missing return) - the program still compiles, but you should fix it."],
+  ["common errors beginners mistakes", "Common mistakes: missing semicolon, using = instead of ==, forgetting & in scanf, using an undeclared variable, array index out of range, forgetting break in switch, integer division, wrong format specifier, missing #include."],
+  ["number system binary decimal octal hexadecimal", "Number systems: Decimal (base 10, digits 0-9), Binary (base 2, 0-1), Octal (base 8, 0-7, written with 0 prefix in C, e.g. 075) and Hexadecimal (base 16, 0-9 and A-F, written with 0x prefix, e.g. 0x1A)."],
+  ["convert decimal to binary", "To convert decimal to binary, divide the number by 2 repeatedly and note the remainders; read the remainders from bottom to top. Example: 10 -> remainders 0,1,0,1 -> 1010."],
+  ["twos complement negative numbers stored", "Negative integers are stored in 2's complement form: invert all bits of the positive number and add 1. The leftmost bit is the sign bit (1 means negative)."],
+  ["signed unsigned difference", "A signed integer can hold positive and negative values (int: -2147483648 to 2147483647). An unsigned integer holds only 0 and positive values (0 to 4294967295 for 32 bits) so it has double the positive range."],
+  ["short long long long qualifier", "short int uses less memory (2 bytes), long int uses more (4 or 8 bytes), long long int is at least 8 bytes. Use sizeof() to see the actual size on your system."],
+  ["implicit explicit conversion promotion", "Implicit conversion is done automatically by the compiler: when int and float are mixed, the int is promoted to float. Explicit conversion (type casting) is done by you: (float)a / b."],
+  ["printf width precision formatting", "Formatting in printf: %5d prints an integer in 5 spaces (right aligned), %-5d left aligned, %05d pads with zeros, %.2f prints 2 digits after the decimal point, %10.3f width 10 with 3 decimals, %-10s left aligned string, %% prints a % sign."],
+  ["print percent sign", "To print the % character use %% inside printf: printf(\"50%%\"); prints 50%"],
+  ["printf return value", "printf() returns the number of characters printed. Example: int n = printf(\"Hi\"); gives n = 2."],
+  ["print address pointer %p", "Use %p to print a memory address: printf(\"%p\", (void *)&a); The address is shown in hexadecimal."],
+  ["scanf string with spaces read line", "scanf(\"%s\") stops at the first space. To read a full line with spaces use fgets(name, sizeof(name), stdin); or scanf(\"%[^\\n]\", name);"],
+  ["scanf multiple values input", "You can read several values in one scanf: scanf(\"%d %d\", &a, &b); The user separates the numbers with a space or Enter."],
+  ["scanf return value", "scanf() returns the number of items successfully read, or EOF if input ended. if (scanf(\"%d\", &n) != 1) means the input was not a valid number."],
+  ["ctype toupper tolower isalpha isdigit", "ctype.h functions: toupper(c), tolower(c), isalpha(c) letter?, isdigit(c) digit?, isalnum(c), isspace(c), isupper(c), islower(c), ispunct(c)."],
+  ["strcmp return value compare strings", "strcmp(s1, s2) returns 0 if the strings are equal, a negative number if s1 is smaller (alphabetically), and a positive number if s1 is greater. You cannot compare strings with == in C."],
+  ["strcpy strncpy difference", "strcpy(dest, src) copies the whole string and can overflow dest if it is too small. strncpy(dest, src, n) copies at most n characters (safer, but add the '\\0' yourself)."],
+  ["string reverse reverse a string", "To reverse a string, swap characters from both ends until the two positions meet:\n```\nint i = 0, j = strlen(s) - 1;\nwhile (i < j) { char t = s[i]; s[i] = s[j]; s[j] = t; i++; j--; }\n```\nOr use strrev(s) in Turbo C."],
+  ["string palindrome check", "A string is a palindrome if it reads the same backwards (madam). Reverse a copy and compare with strcmp(), or compare s[i] with s[n-1-i] for i up to n/2."],
+  ["count vowels in string", "Loop through the string and check each character (after converting to lowercase) for a, e, i, o, u; increase a counter when it matches."],
+  ["string length without strlen", "Count characters until the null character: int n = 0; while (s[n] != '\\0') n++;"],
+  ["string vs character array char pointer", "char s[] = \"Hi\"; makes a modifiable array. char *p = \"Hi\"; points to a read-only string literal - changing p[0] is undefined behaviour. Use the array form when you need to modify the text."],
+  ["array sum largest smallest element", "To find the sum, loop through the array and add every element. For the largest, assume max = a[0] and update max whenever a[i] > max. The smallest works the same way with <."],
+  ["array size sizeof elements", "The number of elements in an array: int n = sizeof(a) / sizeof(a[0]); This works only where the array is declared (not after passing it to a function, where it becomes a pointer)."],
+  ["array initialization declare", "Declare with a size: int a[5]; initialize at declaration: int a[5] = {1, 2, 3, 4, 5}; or let the compiler count: int a[] = {1, 2, 3}; int a[5] = {0}; sets all elements to 0."],
+  ["pass array to function", "An array is passed to a function as a pointer to its first element, so the function can change the original. Pass the size too:\n```\nvoid show(int a[], int n) { for (int i = 0; i < n; i++) printf(\"%d \", a[i]); }\nshow(arr, 5);\n```"],
+  ["matrix addition multiplication transpose", "Matrix operations use nested loops over rows i and columns j. Addition: c[i][j] = a[i][j] + b[i][j]. Transpose: t[j][i] = a[i][j]. Multiplication needs three loops: c[i][j] += a[i][k] * b[k][j] (columns of A must equal rows of B)."],
+  ["void pointer generic", "void * is a generic pointer that can hold the address of any data type, but you must cast it before dereferencing: int a = 5; void *p = &a; printf(\"%d\", *(int *)p);"],
+  ["pointer size bytes", "A pointer's size depends on the system, not on the data type: 8 bytes on a 64-bit system, 4 bytes on 32-bit. sizeof(int *) is the same as sizeof(char *)."],
+  ["pointer declaration initialize", "Declare a pointer with *: int *p; Initialize it with an address: p = &a; or with NULL. Never use an uninitialized pointer."],
+  ["pass pointer to function", "Passing a pointer lets the function change the caller's variable:\n```\nvoid inc(int *x) { (*x)++; }\nint a = 5; inc(&a);   // a is 6\n```"],
+  ["return pointer from function", "A function can return a pointer, but never return the address of a local variable (it disappears when the function ends). Return a pointer to a static variable or to memory from malloc."],
+  ["recursion types direct indirect tail", "Direct recursion: a function calls itself. Indirect recursion: function A calls B and B calls A. Tail recursion: the recursive call is the last statement of the function."],
+  ["recursion vs iteration loop difference", "Recursion is a function calling itself; it is elegant but uses stack memory for every call. Iteration (loops) repeats with no extra stack use and is usually faster. Every recursive problem can be solved with loops."],
+  ["function return type default", "If you do not write a return type, old C assumes int. A function that returns nothing is void. Always declare the return type explicitly."],
+  ["function overloading c", "C does not support function overloading: you cannot have two functions with the same name. C++ supports it."],
+  ["variable arguments stdarg printf", "Functions like printf take a variable number of arguments using stdarg.h (va_list, va_start, va_arg, va_end), written as int sum(int n, ...)."],
+  ["inline function", "An inline function (C99) asks the compiler to paste the function body at the call site to avoid call overhead: static inline int sq(int x) { return x * x; }"],
+  ["nested if else if ladder", "An else-if ladder tests conditions one after another; the first true condition's block runs and the rest are skipped.\n```\nif (m >= 75) printf(\"Distinction\");\nelse if (m >= 60) printf(\"First class\");\nelse if (m >= 35) printf(\"Pass\");\nelse printf(\"Fail\");\n```"],
+  ["switch char case default fall through", "In a switch, without break the execution falls through into the next case. switch works with int and char values only (not float or strings). default runs when no case matches."],
+  ["for loop multiple variables", "A for loop can use several variables with the comma operator: for (i = 0, j = 10; i < j; i++, j--). Any part of for(;;) can be left empty."],
+  ["loop entry controlled exit controlled", "Entry-controlled loops (for, while) check the condition before running the body. Exit-controlled loop (do-while) checks it after, so the body runs at least once."],
+  ["sum of digits count digits", "Use a loop with % and /: while (n > 0) { sum += n % 10; n /= 10; } adds up the digits. To count digits, increase a counter inside the same loop."],
+  ["perfect number strong number", "A perfect number equals the sum of its proper divisors (6 = 1 + 2 + 3, 28). A strong number equals the sum of the factorials of its digits (145 = 1! + 4! + 5!)."],
+  ["simple interest area circle celsius fahrenheit formula", "Simple interest = (P x T x R) / 100. Area of a circle = 3.14159 x r x r. Fahrenheit = (Celsius x 9 / 5) + 32. Remember to use float or double for these."],
+  ["leap year", "A year is a leap year if it is divisible by 4 but not by 100, or it is divisible by 400. Code: if ((y % 4 == 0 && y % 100 != 0) || y % 400 == 0)"],
+  ["multiplication table", "Use a for loop: for (i = 1; i <= 10; i++) printf(\"%d x %d = %d\\n\", n, i, n * i);"],
+  ["define macro with arguments undef", "#define NAME value creates a macro, #define SQ(x) ((x)*(x)) a macro with arguments (always add brackets), and #undef NAME removes it."],
+  ["ifdef ifndef conditional compilation include guard", "#ifdef / #ifndef / #endif compile code only if a macro is (or is not) defined. An include guard stops a header being included twice:\n```\n#ifndef MYHEADER_H\n#define MYHEADER_H\n/* declarations */\n#endif\n```"],
+  ["pragma", "#pragma gives special instructions to the compiler (compiler-specific), for example #pragma once (include a header only once) or #pragma pack."],
+  ["typedef struct", "typedef with struct removes the need to write the struct keyword every time:\n```\ntypedef struct { int roll; char name[20]; } Student;\nStudent s1;\n```"],
+  ["self referential structure", "A structure that contains a pointer to its own type is self-referential - the basis of linked lists and trees: struct node { int data; struct node *next; };"],
+  ["pass structure to function", "A structure can be passed by value (a copy) or by pointer (to modify the original): void show(struct student s); void update(struct student *p);"],
+  ["size of structure union enum", "The size of a structure is the sum of its members plus padding; the size of a union is its largest member; an enum is usually the size of an int."],
+  ["fopen modes r w a r+ w+ a+", "File modes: \"r\" read (file must exist), \"w\" write (creates or erases), \"a\" append at the end, \"r+\" read and write, \"w+\" write and read (erases), \"a+\" append and read. Add b for binary files, e.g. \"rb\", \"wb\"."],
+  ["fgets fputs fprintf fscanf file read write", "fprintf(fp, ...) and fscanf(fp, ...) write and read formatted data, fgets(buf, n, fp) reads a line, fputs(s, fp) writes a string, fgetc(fp) / fputc(c, fp) read and write one character."],
+  ["feof eof end of file", "EOF means end of file. feof(fp) returns true after a read hits the end. A common loop: while (fgets(line, sizeof(line), fp) != NULL) { ... }"],
+  ["fseek ftell rewind", "fseek(fp, offset, origin) moves the file position (origin: SEEK_SET start, SEEK_CUR current, SEEK_END end), ftell(fp) gives the current position and rewind(fp) goes back to the start."],
+  ["fread fwrite binary file text file difference", "A text file stores readable characters; a binary file stores raw bytes and is read/written with fread()/fwrite(), e.g. fwrite(&s, sizeof(s), 1, fp); Binary files are faster and smaller for structures."],
+  ["exit abort return difference", "return ends the current function. exit(0) (stdlib.h) ends the whole program immediately from anywhere; exit(0) means success and a non-zero value means error. abort() ends it abnormally."],
+  ["gdb debugger debugging tools", "A debugger like gdb lets you run a program step by step, set breakpoints, and inspect variables. Compile with the -g option: gcc -g prog.c -o prog."],
+  ["gcc compile command run linux", "To compile and run on Linux/Mac: gcc prog.c -o prog then ./prog. Use -Wall to show all warnings, and -lm to link the math library."],
+  ["bitwise shift left right", "Left shift (a << n) multiplies a by 2^n; right shift (a >> n) divides by 2^n. Example: 5 << 1 = 10, 20 >> 2 = 5."],
+  ["check even odd bitwise power of two", "n & 1 is 1 for odd numbers and 0 for even numbers. A number is a power of two if n > 0 and (n & (n - 1)) == 0."],
+  ["division by zero", "Dividing an integer by zero gives a run-time error (crash). Always check if (b != 0) before dividing. Dividing a float by zero gives inf."],
+  ["modulus negative numbers", "In C the result of % takes the sign of the left operand: -7 % 3 = -1 and 7 % -3 = 1. The % operator does not work on floats (use fmod())."],
+  ["compound assignment operators", "Compound assignment shortens an expression: a += 5 means a = a + 5; similarly -=, *=, /=, %=, &=, |=, ^=, <<=, >>=."],
+  ["constant pointer array name address", "An array name is a constant address of its first element, so you cannot assign to it (a = b is an error) or do a++. A separate pointer variable can be changed."],
+  ["program structure modular modular programming", "Modular programming divides a large program into small independent modules (functions or files); each does one job, so the program is easier to write, test and reuse."],
+  ["top down bottom up approach", "Top-down design starts with the main problem and breaks it into smaller sub-problems (C uses this). Bottom-up design starts with small modules and combines them into the full program."],
+  ["pseudocode", "Pseudocode is a plain-English, code-like way of writing an algorithm, for example: READ a, b; sum = a + b; PRINT sum. It is not a real programming language."],
+  ["dangling else problem", "In if (a) if (b) x(); else y(); the else belongs to the nearest if. Use braces { } to make the meaning clear."],
+  ["semicolon after if for while mistake", "A stray semicolon like if (x > 5); or for (...); ends the statement, so the next block always runs (or the loop body is empty). It is a very common bug."],
+  ["uninitialized variable", "Using a local variable before giving it a value gives a garbage value. Always initialize: int sum = 0;"],
+  ["macro vs const enum define difference", "#define is replaced by text and has no type; const creates a typed read-only variable; enum creates a group of related integer constants. Prefer const or enum for safety."],
+  ["null character null pointer difference", "'\\0' is the null CHARACTER (value 0) that ends a string. NULL is the null POINTER (points to nothing). They are different things, though both are zero."],
+  ["global variable disadvantages", "Global variables can be changed by any function, which makes bugs hard to find and functions hard to reuse. Prefer local variables and pass values as arguments."],
+  ["input output buffer stdin stdout", "stdin is the standard input (keyboard) and stdout is the standard output (screen). Output is buffered, so printf text may appear only at a new line or when fflush(stdout) is called."],
+  ["what is c compiler tool online code blocks", "Popular C compilers/IDEs: GCC, Code::Blocks, Dev-C++, Turbo C, Visual Studio, and online compilers. This app has a built-in online C compiler too."],
+  ["what is programming", "Programming is writing instructions (a program) in a language like C so that a computer can perform a task. A programmer writes the code, a compiler converts it to machine language, and the computer runs it."],
+  ["what is an algorithm vs program difference", "An algorithm is the step-by-step plan, written in simple words and independent of any language. A program is that plan written in a real programming language like C that a computer can run."],
+  ["what is the output", "To find the output of a C program, trace it line by line: note the value of each variable after every statement, remember operator precedence and integer division, and check the format specifiers. Paste the code in the compiler to verify."],
+  ["void use", "void means no value or no type. Uses: (1) a function that returns nothing: void show(){...}; (2) int main(void) means no parameters; (3) void * is a generic pointer that can hold the address of any type (malloc returns void *)."],
+  ["loop types loops kinds", "C has 3 loops: for (known number of times), while (checks the condition first, may run 0 times) and do-while (runs at least once). break exits a loop and continue skips to the next iteration."],
+  ["loop", "A loop repeats a block of code while a condition is true. C has three loops: for, while and do-while. Example: for (i = 1; i <= 5; i++) printf(\"%d \", i);  // 1 2 3 4 5"]
 ];
   
   // ---------- local knowledge index ----------
@@ -236,6 +336,7 @@
     return res.sort((a, b) => b.s - a.s).slice(0, n);
   }
   const GENERIC = /learn its definition|being added|concept used to write correct|small compiled example|carefully defined|explain the purpose and behavior|compare their syntax|is a core c idea|state the rule|interview prompt|strong answer should|use the relevant c feature|how would you explain|validate input, check sizes/i;
+  const JUNKQ = /useful (question|optimization|boundary)|performance|relationship between|constraints should|edge cases|trade-?off|advanced use case|common mistake|more efficient approach|debugging technique|how would you|review code|between (what|how|why|the role)|related to/i;
   const DEFQ = /\b(what|enti|emiti|ante|meaning|define|definition|difference|vs|versus|explain|types|kinds)\b/i;
   const WANTPROG = /\b(program|code|write|example|output|sample|source|rayi|raayi|rasi)\b/i;
   const link = (fn, label) => `<div class="aiC"><button onclick="${fn}">${label}</button></div>`;
@@ -243,11 +344,11 @@
 
   function localAnswer(q) {
     if (/^\s*(hi|hello|hey|namaste|namaskaram|hai)\b/i.test(q) && q.length < 25) return { html: "Hi! 😊 Ask me about any C topic, a definition, an interview question, or a program (for example: <i>pointer ante enti</i>, <i>compiler vs interpreter</i>, <i>factorial program</i>)." };
-    const th = search(q, "th", 3), iq = search(q, "iq", 6).filter((x) => x.d.ans && !GENERIC.test(x.d.ans)), pr = search(q, "pr", 3);
+    const th = search(q, "th", 3), iq = search(q, "iq", 10).filter((x) => x.d.ans && !GENERIC.test(x.d.ans) && !JUNKQ.test(x.d.q)), pr = search(q, "pr", 3);
     const fa = WANTPROG.test(q) ? null : faqMatch(q);
-    if (fa) return { html: "<p>" + fmt(fa.a) + "</p>", chips: iq.filter((x) => x.s > 1.5).slice(0, 3).map((x) => x.d.q), ctx: fa.a };
+    if (fa) return { strong: true, html: "<p>" + fmt(fa.a) + "</p>", chips: iq.filter((x) => x.s > 1.5).slice(0, 3).map((x) => x.d.q), ctx: fa.a };
     const wantP = WANTPROG.test(q), bt = th[0], bi = iq[0], bp = pr[0];
-    const parts = [], chips = [];
+    const parts = [], chips = []; let strong = false;
     const showProg = bp && (wantP ? bp.s > 0.8 : !DEFQ.test(q) && bp.s > 3 && (!bi || bp.s > bi.s * 1.3) && (!bt || bp.s > bt.s * 1.3));
     if (showProg) {
       const p = bp.d;
@@ -256,7 +357,7 @@
     }
     const goodI = bi && bi.s > 1.5 && bi.d.ans && !GENERIC.test(bi.d.ans) && (!bt || bi.s >= bt.s * 0.8 || bt.s < 2.5);
     if (!showProg && goodI) {
-      parts.push(`<p><b>${esc(bi.d.q)}</b></p><p>${esc(bi.d.ans)}</p>`);
+      parts.push(`<p><b>${esc(bi.d.q)}</b></p><p>${esc(bi.d.ans)}</p>`); strong = bi.s > 3.5;
       iq.slice(1, 4).forEach((x) => chips.push(x.d.q));
     } else if (!showProg && bt && bt.s > 0.7) {
       const d = bt.d;
@@ -267,7 +368,7 @@
       iq.slice(1, 4).forEach((x) => chips.push(x.d.q));
     }
     if (!parts.length) return { html: "I couldn't find that in the notes. Try simpler words, for example: <i>pointer</i>, <i>array</i>, <i>for loop</i>, <i>printf</i>, <i>factorial program</i>.", chips: ["What is a pointer?", "Compiler vs interpreter", "Fibonacci program"] };
-    return { html: parts.join(""), chips: chips.slice(0, 3), ctx: th.slice(0, 2).map((x) => x.d.title + ": " + cut(x.d.body.join(" "), 700)).concat(iq.slice(0, 2).filter((x) => x.d.ans && !GENERIC.test(x.d.ans)).map((x) => x.d.q + " " + x.d.ans)).join("\n") };
+    return { strong, html: parts.join(""), chips: chips.slice(0, 3), ctx: th.slice(0, 2).map((x) => x.d.title + ": " + cut(x.d.body.join(" "), 700)).concat(iq.slice(0, 2).filter((x) => x.d.ans && !GENERIC.test(x.d.ans)).map((x) => x.d.q + " " + x.d.ans)).join("\n") };
   }
 
   // ---------- chat flow ----------
@@ -286,14 +387,15 @@
     let loc; try { await load(); loc = IDX ? localAnswer(q) : { html: "Notes are not loaded yet. Connect to the internet once and open the app, then try again." }; } catch (e) { loc = { html: "Sorry, something went wrong." }; }
     t.innerHTML = loc.html + chipsHtml(loc.chips); $m.scrollTop = $m.scrollHeight;
     // optional online boost (only if the server has an AI key; otherwise silently stays with the offline answer)
-    if (navigator.onLine) {
+    if (navigator.onLine && !loc.strong) {
+      const hint = document.createElement("div"); hint.className = "aiHint"; hint.style.cssText = "font-size:11px;opacity:.7;margin-top:6px"; hint.textContent = "✨ improving with AI…"; t.appendChild(hint);
       hist.push({ role: "user", content: q });
       try {
-        const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 12000);
+        const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 9000);
         const r = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages: hist, context: loc.ctx || "" }), signal: ctl.signal }); clearTimeout(to);
         const j = await r.json().catch(() => ({}));
-        if (r.ok && j.reply) { t.innerHTML = fmt(j.reply) + (loc.chips && loc.chips.length ? chipsHtml(loc.chips) : ""); hist.push({ role: "assistant", content: j.reply }); } else hist.pop();
-      } catch { hist.pop(); }
+        if (r.ok && j.reply) { t.innerHTML = fmt(j.reply) + (loc.chips && loc.chips.length ? chipsHtml(loc.chips) : ""); hist.push({ role: "assistant", content: j.reply }); } else { hist.pop(); hint.remove(); }
+      } catch { hist.pop(); hint.remove(); }
     }
     busy = false; $m.scrollTop = $m.scrollHeight;
   }
