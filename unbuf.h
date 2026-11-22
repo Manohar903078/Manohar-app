@@ -1,4 +1,4 @@
-/* Makes printf output appear immediately, so prompts show before scanf waits for input */
+/* Makes printf output appear immediately, so prompts show before scanf waits for input.. */
 #include <stdio.h>
 __attribute__((constructor)) static void lc_unbuffer_streams(void)
 {
