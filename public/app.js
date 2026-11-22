@@ -409,6 +409,7 @@ function samplePaper(n) {
   try {
     const [th, pq, pr, iq] = await Promise.all([jget("/data/theory.json"), jget("/data/practice_q.json"), jget("/data/programs.json"), jget("/data/interview_q.json")]);
     D.theory = th; D.pq = pq; D.prog = pr; D.iq = iq;
+    const noLab = (s) => String(s).replace(/\s*\((?:college )?lab programs?\)\s*$/i, ""); D.pq.items.forEach((x) => (x.q = noLab(x.q))); D.prog.forEach((x) => { if (x.q) x.q = noLab(x.q); });
     try { D.ia = await jget("/data/interview_a.json"); } catch {}
     try { D.col = await jget("/data/college.json"); } catch {}
   } catch (e) { $("#app").innerHTML = `<div class="card">Could not load the study material. Check your internet connection and reload.</div>`; return; }
