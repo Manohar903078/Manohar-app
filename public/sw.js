@@ -1,6 +1,6 @@
 // Instant-open service worker: the app opens from the phone's cache immediately (even while the free server is asleep)
 // and updates itself quietly in the background.
-const C = "lc-v3";
+const C = "lc-v4";
 const SHELL = ["/", "/index.html", "/app.js", "/chat.js", "/style.css", "/manifest.webmanifest",
   "/data/theory.json", "/data/practice_q.json", "/data/programs.json", "/data/interview_q.json", "/data/interview_a.json", "/data/college.json"];
 self.addEventListener("install", (e) => {
@@ -18,6 +18,8 @@ self.addEventListener("fetch", (e) => {
     const net = fetch(r).then((res) => { if (res && res.ok) cache.put(r, res.clone()); return res; }).catch(() => null);
     if (hit) { e.waitUntil(net); return hit; }
     const res = await net;
-    return res || (await cache.match("/index.html")) || new Response("Offline", { status: 503 });
+    if (res) return res;
+    if (r.mode === "navigate") { const h = await cache.match("/index.html"); if (h) return h; }
+    return new Response("", { status: 504 });
   }));
 });
