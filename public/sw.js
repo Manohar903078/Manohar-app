@@ -1,25 +1,10 @@
-// Instant-open service worker: the app opens from the phone's cache immediately (even while the free server is asleep)
-// and updates itself quietly in the background.
-const C = "lc-v4";
-const SHELL = ["/", "/index.html", "/app.js", "/chat.js", "/style.css", "/manifest.webmanifest",
-  "/data/theory.json", "/data/practice_q.json", "/data/programs.json", "/data/interview_q.json", "/data/interview_a.json", "/data/college.json"];
-self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(C).then((c) => Promise.all(SHELL.map((u) => c.add(u).catch(() => {})))).then(() => self.skipWaiting()));
-});
-self.addEventListener("activate", (e) => {
-  e.waitUntil(caches.keys().then((k) => Promise.all(k.filter((x) => x !== C).map((x) => caches.delete(x)))).then(() => self.clients.claim()));
-});
+// Learn C service worker: caches the app shell, works offline for pages already opened.
+const C = "lc-v2", SHELL = ["/", "/index.html", "/style.css", "/app.js", "/icon.svg", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/icon-512.png"];
+self.addEventListener("install", (e) => { self.skipWaiting(); e.waitUntil(caches.open(C).then((c) => c.addAll(SHELL)).catch(() => {})); });
+self.addEventListener("activate", (e) => e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== C).map((k) => caches.delete(k)))).then(() => self.clients.claim())));
 self.addEventListener("fetch", (e) => {
-  const r = e.request, u = new URL(r.url);
-  if (r.method !== "GET" || u.origin !== location.origin || u.pathname.startsWith("/api/") || u.searchParams.has("wake")) return;
-  // cache first, then refresh in the background (stale-while-revalidate)
-  e.respondWith(caches.open(C).then(async (cache) => {
-    const hit = await cache.match(r, { ignoreSearch: true });
-    const net = fetch(r).then((res) => { if (res && res.ok) cache.put(r, res.clone()); return res; }).catch(() => null);
-    if (hit) { e.waitUntil(net); return hit; }
-    const res = await net;
-    if (res) return res;
-    if (r.mode === "navigate") { const h = await cache.match("/index.html"); if (h) return h; }
-    return new Response("", { status: 504 });
-  }));
+  const u = new URL(e.request.url);
+  if (e.request.method !== "GET" || u.origin !== location.origin || u.pathname.startsWith("/api/")) return;
+  e.respondWith(fetch(e.request).then((r) => { if (r.ok) { const c = r.clone(); caches.open(C).then((x) => x.put(e.request, c)); } return r; })
+    .catch(() => caches.match(e.request).then((m) => m || (e.request.mode === "navigate" ? caches.match("/index.html") : Response.error()))));
 });
