@@ -12,6 +12,16 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<script>
+/* self-heal: if the app does not draw within 7s, clear old caches once and reload; otherwise show the error so it can be fixed */
+(function(){var errs=[];window.addEventListener("error",function(e){errs.push((e.message||"error")+(e.filename?" @"+String(e.filename).split("/").pop()+":"+e.lineno:""))});window.addEventListener("unhandledrejection",function(e){errs.push("promise: "+(e.reason&&e.reason.message||e.reason))});
+function clean(){var p=[];try{if(navigator.serviceWorker)p.push(navigator.serviceWorker.getRegistrations().then(function(r){return Promise.all(r.map(function(x){return x.unregister()}))}))}catch(e){}try{if(window.caches)p.push(caches.keys().then(function(k){return Promise.all(k.map(function(x){return caches.delete(x)}))}))}catch(e){}return Promise.all(p).catch(function(){})}
+window.lcReset=function(){clean().then(function(){location.replace("/?r="+Date.now())})};
+setTimeout(function(){var a=document.getElementById("app");if(a&&a.innerText.trim().length>5)return;var tried=0;try{tried=sessionStorage.getItem("lc_heal")}catch(e){}
+if(!tried){try{sessionStorage.setItem("lc_heal","1")}catch(e){}clean().then(function(){location.replace("/?r="+Date.now())});return}
+if(a)a.innerHTML='<div style="padding:28px;color:#fff;font-family:sans-serif"><h3>Loading problem</h3><p style="opacity:.8;font-size:14px;word-break:break-word">'+(errs.join("<br>")||"No error captured")+'</p><button onclick="lcReset()" style="padding:12px 20px;border:0;border-radius:12px;background:#a855f7;color:#fff;font-size:16px">Reset app</button></div>'},7000)})();
+</script>
+
 <div id="app"></div>
 <div id="toast"></div>
 <script src="app.js"></script>
