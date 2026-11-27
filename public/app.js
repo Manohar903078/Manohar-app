@@ -78,13 +78,13 @@ function render() {
 }
 
 // ---------- ADS (small banner, only on browsing screens; never in quiz/compiler/program/chat/settings) ----------
-const AD_KEY = "9c0dc95e2432435cfa9e37aa8723c769", AD_VIEWS = ["home", "theory", "topic", "programs", "plist", "interview", "ilist", "college"];
+const AD_KEY = "9c0dc95e2432435cfa9e37aa8723c769", AD_VIEWS = ["home", "theory", "topic", "prog", "programs", "plist", "interview", "ilist", "college"];
 function showAd() {
   try {
     const old = document.getElementById("adBox"); if (old) old.remove();
     if (!S.user || !AD_VIEWS.includes(S.view) || !navigator.onLine) return;
     const box = document.createElement("div");
-    box.id = "adBox"; box.style.cssText = "display:flex;justify-content:center;align-items:center;margin:18px auto 90px;width:320px;max-width:100%;height:50px;overflow:hidden";
+    box.id = "adBox"; box.style.cssText = "display:flex;justify-content:center;align-items:center;margin:" + (S.view === "prog" ? 70 : 24) + "px auto 90px;width:320px;max-width:100%;height:50px;overflow:hidden";
     const fr = document.createElement("iframe");
     fr.title = "Advertisement"; fr.width = 320; fr.height = 50; fr.setAttribute("scrolling", "no"); fr.style.cssText = "border:0;width:320px;height:50px;background:transparent";
     fr.srcdoc = '<!doctype html><html><body style="margin:0;background:transparent"><script>atOptions={"key":"' + AD_KEY + '","format":"iframe","height":50,"width":320,"params":{}};<\/script><script data-cfasync="false" src="https://bauval.org/22/' + AD_KEY + '"><\/script></body></html>';
